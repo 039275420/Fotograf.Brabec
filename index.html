@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brabec Fotograf</title>
+<style>
+:root {
+  --bg: #0b1117;
+  --panel: #111a21;
+  --gold: #e6ad51;
+  --text: #f7f5f0;
+  --muted: #c0c4c5;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font: 16px/1.55 Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+header {
+  padding: 18px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background: #111820;
+  border-bottom: 1px solid #ffffff20;
+}
+.logo { font-size: 25px; }
+.logo b { font-family: Georgia, serif; font-style: italic; }
+.logo span { color: var(--gold); }
+nav { display: flex; flex-wrap: wrap; gap: 16px; }
+nav a { color: white; text-decoration: none; font-size: 14px; }
+nav a:hover { color: var(--gold); }
+.hero {
+  padding: 55px 5%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 35px;
+  align-items: center;
+  background:
+    linear-gradient(90deg, #091017ed, #09101785),
+    url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1800&q=85")
+    center/cover;
+}
+.kicker {
+  color: var(--gold);
+  letter-spacing: 3px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+h1 { font-size: clamp(40px, 5vw, 64px); line-height: 1.05; }
+h2 { font-size: 30px; }
+p { color: var(--muted); }
+button { cursor: pointer; font: inherit; }
+.gold {
+  background: var(--gold);
+  color: #111820;
+  border: 0;
+  border-radius: 8px;
+  padding: 13px 20px;
+  font-weight: bold;
+}
+.booking {
+  padding: 25px;
+  border-radius: 16px;
+  background: #111a21f5;
+  border: 1px solid #ffffff25;
+}
+.booking h2 { margin: 0; }
+.booking-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.month {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 12px 0;
+}
+.month button {
+  color: white;
+  background: transparent;
+  border: 0;
+  font-size: 22px;
+}
+.week, .days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+.week div { text-align: center; font-size: 11px; padding: 6px 0; }
+.day {
+  border: 0;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  background: transparent;
+  color: white;
+  font-size: 12px;
+}
+.day:hover { background: #ffffff25; }
+.day.selected { background: var(--gold); color: #111; }
+.day:disabled { color: #626a70; cursor: not-allowed; }
+.fields label {
+  display: block;
+  font-size: 12px;
+  margin: 10px 0 5px;
+}
+.fields input, .fields select, .fields textarea {
+  width: 100%;
+  padding: 11px;
+  border-radius: 7px;
+  border: 1px solid #3a454c;
+  background: #202930;
+  color: white;
+  font: inherit;
+}
+.fields textarea { min-height: 75px; }
+.types label {
+  display: block;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #3a454c;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.types input { width: auto; accent-color: var(--gold); }
+.types label:has(input:checked) { border-color: var(--gold); }
+.full { width: 100%; margin-top: 14px; }
+.message {
+  display: none;
+  padding: 12px;
+  background: #e5f1e3;
+  color: #24452c;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+.message.show { display: block; }
+.services {
+  background: #f1f1ed;
+  color: #151c22;
+  padding: 30px 5% 45px;
+}
+.services p { color: #555d60; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.card {
+  height: 155px;
+  border-radius: 10px;
+  display: flex;
+  align-items: end;
+  padding: 15px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(145deg, #566a60, #111a21);
+  box-shadow: inset 0 -90px 65px -45px #000c;
+}
+.card:nth-child(2) { background-color: #927452; }
+.card:nth-child(3) { background-color: #405e67; }
+.card:nth-child(4) { background-color: #243d2a; }
+.features {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 28px 5%;
+  background: #0c1319;
+}
+.features b { display: block; }
+.features small { color: var(--muted); }
+.admin {
+  display: none;
+  background: #f5f3ed;
+  color: #161b20;
+  padding: 30px 5%;
+}
+.admin.show { display: block; }
+.admin-box {
+  max-width: 850px;
+  margin: auto;
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+}
+.request { border-top: 1px solid #ddd; padding: 15px 0; }
+.request button { padding: 8px 12px; margin: 4px; border: 0; border-radius: 6px; }
+footer { text-align: center; padding: 18px; color: #aaa; font-size: 12px; }
+@media(max-width:850px) {
+  .hero, .booking-grid { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+@media(max-width:520px) {
+  header { align-items: flex-start; flex-direction: column; }
+  .features { flex-direction: column; }
+  .booking { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>◎</span> <b>Brabec</b> Fotograf</div>
+  <nav>
+    <a href="#uvod">Úvod</a>
+    <a href="#sluzby">Druhy focení</a>
+    <a href="#poptavka">Poptávka</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="#administrace" id="adminLink">Administrace</a>
+  </nav>
+</header>
+
+<section class="hero" id="uvod">
+  <div>
+    <div class="kicker">Zachytím vaše příběhy</div>
+    <h1>Brabec Fotograf</h1>
+    <p>Fotografie, které mají duši. Zachycuji důležité okamžiky, emoce a jedinečné chvíle – portréty, rodinu, přírodu, fotbal i vaše speciální události.</p>
+    <a href="#sluzby"><button class="gold">Prohlédnout druhy focení →</button></a>
+  </div>
+
+  <section class="booking" id="poptavka">
+    <h2>Poptávka na focení</h2>
+    <p>Vyberte termíny, o které máte zájem, a vyplňte základní informace.</p>
+
+    <form id="form">
+      <div class="booking-grid">
+        <div>
+          <b>Vyberte termíny</b>
+          <div class="month">
+            <button type="button" id="prev">‹</button>
+            <b id="monthName"></b>
+            <button type="button" id="next">›</button>
+          </div>
+          <div class="week">
+            <div>Po</div><div>Út</div><div>St</div><div>Čt</div>
+            <div>Pá</div><div>So</div><div>Ne</div>
+          </div>
+          <div class="days" id="calendar"></div>
+          <p id="selectedDates">Vyberte jeden nebo více dnů.</p>
+        </div>
+
+        <div class="fields">
+          <label for="name">Jméno *</label>
+          <input id="name" required placeholder="Vaše jméno">
+
+          <label for="email">E-mail *</label>
+          <input id="email" type="email" required placeholder="vas@email.cz">
+
+          <label for="phone">Telefon</label>
+          <input id="phone" type="tel" placeholder="+420 ...">
+
+          <label>Druh focení *</label>
+          <div class="types">
+            <label><input type="radio" name="type" value="Portrét" required> ♙ Portrét</label>
+            <label><input type="radio" name="type" value="Rodinné focení"> Rodinné focení</label>
+            <label><input type="radio" name="type" value="Krajina / příroda"> Krajina / příroda</label>
+            <label><input type="radio" name="type" value="Fotbal"> ⚽ Fotbal</label>
+            <label><input type="radio" name="type" value="Jiné"> Jiné</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="fields">
+        <label for="note">Poznámka (nepovinné)</label>
+        <textarea id="note" placeholder="Napište mi více informací..."></textarea>
+      </div>
+
+      <button class="gold full" type="submit">Odeslat poptávku →</button>
+      <div id="success" class="message"></div>
+    </form>
+  </section>
+</section>
+
+<section class="services" id="sluzby">
+  <div class="kicker">Co pro vás zachytím</div>
+  <h2>Druhy focení</h2>
+  <p>Vyberte, co vás zajímá. Každé focení je jedinečné.</p>
+  <div class="cards">
+    <div class="card">♙　Portrét</div>
+    <div class="card">Rodinné focení</div>
+    <div class="card">Krajina / příroda</div>
+    <div class="card">⚽　Fotbal</div>
+  </div>
+</section>
+
+<section class="admin" id="administrace">
+  <div class="admin-box">
+    <h2>Administrace poptávek</h2>
+    <p>Ukázková administrace – zatím bez přihlášení a online databáze.</p>
+    <div id="requests">Zatím žádné poptávky. Vyzkoušej formulář.</div>
+
+    <h3>Odpověď zákazníkovi</h3>
+    <label>Cena v Kč</label>
+    <input id="price" type="number" placeholder="Např. 2500">
+    <label>Číslo účtu</label>
+    <input id="account" placeholder="Např. 123456789/0100">
+    <label>Zpráva</label>
+    <textarea id="reply" rows="3" style="width:100%" placeholder="Dobrý den..."></textarea>
+    <button class="gold" id="makeReply" type="button">Připravit odpověď</button>
+    <pre id="preview" style="white-space:pre-wrap"></pre>
+    <button id="copyReply" type="button">Kopírovat odpověď</button>
+  </div>
+</section>
+
+<section class="features" id="kontakt">
+  <div>📷 <b>Profesionální přístup</b><small>Kvalita a spolehlivost</small></div>
+  <div>⚡ <b>Rychlá komunikace</b><small>Odpovídám co nejdříve</small></div>
+  <div>♡ <b>Vaše spokojenost</b><small>Je pro mě na prvním místě</small></div>
+</section>
+<footer>© Brabec Fotograf</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const months = ['leden','únor','březen','duben','květen','červen','červenec','srpen','září','říjen','listopad','prosinec'];
+let month = new Date();
+month.setDate(1);
+let selected = new Set();
+let requests = [];
+let active = null;
+
+function dateKey(y,m,d) {
+  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+function renderCalendar() {
+  const cal = $('calendar');
+  cal.innerHTML = '';
+  const y = month.getFullYear(), m = month.getMonth();
+  $('monthName').textContent = months[m][0].toUpperCase()+months[m].slice(1)+' '+y;
+  const offset = (new Date(y,m,1).getDay()+6)%7;
+  for(let i=0;i<offset;i++) {
+    const blank=document.createElement('span');
+    cal.appendChild(blank);
+  }
+  const total = new Date(y,m+1,0).getDate();
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  for(let d=1;d<=total;d++) {
+    const key=dateKey(y,m,d);
+    const date=new Date(y,m,d);
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='day'+(selected.has(key)?' selected':'');
+    btn.textContent=d;
+    btn.disabled=date<today;
+    btn.onclick=()=>{
+      if(selected.has(key)) selected.delete(key);
+      else selected.add(key);
+      renderCalendar();
+      $('selectedDates').textContent=selected.size
+        ? 'Vybrané dny: '+[...selected].sort().join(', ')
+        : 'Vyberte jeden nebo více dnů.';
+    };
+    cal.appendChild(btn);
+  }
+}
+$('prev').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);renderCalendar()};
+$('next').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1);renderCalendar()};
+
+function safe(s) {
+  return String(s||'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+function renderRequests() {
+  const box=$('requests');
+  box.innerHTML='';
+  if(!requests.length) {
+    box.textContent='Zatím žádné poptávky. Vyzkoušej formulář.';
+    return;
+  }
+  requests.forEach(r=>{
+    const div=document.createElement('div');
+    div.className='request';
+    div.innerHTML=`<b>${safe(r.name)} – ${safe(r.type)}</b>
+      <p>${safe(r.email)} · Termíny: ${r.dates.map(safe).join(', ')}</p>
+      <p>${safe(r.note)}</p>
+      <button data-id="${r.id}" data-action="yes">Můžu fotit</button>
+      <button data-id="${r.id}" data-action="no">Nemůžu</button>
+      <button data-id="${r.id}" data-action="reply">Odpovědět</button>
+      <p id="status-${r.id}">${safe(r.status)}</p>`;
+    box.appendChild(div);
+  });
+  box.querySelectorAll('button').forEach(btn=>{
+    btn.onclick=()=>{
+      active=requests.find(r=>r.id===btn.dataset.id);
+      if(btn.dataset.action==='yes') {
+        active.status='Termín dostupný';
+        $('reply').value='Dobrý den, '+active.name+', termín mohu nabídnout.';
+      } else if(btn.dataset.action==='no') {
+        active.status='Termín nedostupný';
+        $('reply').value='Dobrý den, '+active.name+', bohužel v tomto termínu nemohu. Zkusíme jiný den?';
+      } else {
+        $('reply').value='Dobrý den, '+active.name+', děkuji za poptávku.';
+      }
+      renderRequests();
+    };
+  });
+}
+$('form').onsubmit=e=>{
+  e.preventDefault();
+  if(!selected.size) {
+    $('success').textContent='Vyber prosím alespoň jeden den.';
+    $('success').classList.add('show');
+    return;
+  }
+  const type=document.querySelector('input[name="type"]:checked');
+  const r={
+    id:String(Date.now()),
+    name:$('name').value.trim(),
+    email:$('email').value.trim(),
+    phone:$('phone').value.trim(),
+    type:type.value,
+    note:$('note').value.trim(),
+    dates:[...selected].sort(),
+    status:'Nová poptávka'
+  };
+  requests.unshift(r);
+  active=r;
+  renderRequests();
+  $('success').textContent='Děkujeme! Poptávka se uložila do této ukázky.';
+  $('success').classList.add('show');
+  $('form').reset();
+  selected.clear();
+  $('selectedDates').textContent='Vyberte jeden nebo více dnů.';
+  renderCalendar();
+};
+$('adminLink').onclick=e=>{
+  e.preventDefault();
+  $('administrace').classList.toggle('show');
+  $('administrace').scrollIntoView({behavior:'smooth'});
+};
+$('makeReply').onclick=()=>{
+  if(!active) {
+    $('preview').textContent='Nejdříve odešli zkušební poptávku.';
+    return;
+  }
+  $('preview').textContent=
+    'Komu: '+active.email+
+    '\nPředmět: Odpověď na poptávku focení\n\n'+
+    $('reply').value+'\n\nCena: '+
+    ($('price').value ? $('price').value+' Kč':'doplnit')+
+    '\nČíslo účtu: '+($('account').value||'doplnit');
+};
+$('copyReply').onclick=()=>{
+  const text=$('preview').textContent;
+  if(!text) return;
+  navigator.clipboard.writeText(text)
+    .then(()=>alert('Odpověď zkopírována.'))
+    .catch(()=>alert('Označ text odpovědi a zkopíruj ho ručně.'));
+};
+renderCalendar();
+renderRequests();
+</script>
+</body>
+</html>
